@@ -1,19 +1,23 @@
 {
-  "name": "classe-01",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "dev": "nodemon src/index.js"
-  },
-  "dependencies": {
-    "express": "^4.17.3",
-    "jsonwebtoken": "^8.5.1",
-    "pg": "^8.7.3",
-    "secure-password": "^4.0.0"
-  },
-  "devDependencies": {
-    "dotenv": "^16.0.1",
-    "nodemon": "^2.0.15"
-  }
+    "name": "classe-01",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "dev": "nodemon src/index.js",
+        "lint": "eslint src --ext .js"
+    },
+    "dependencies": {
+        "express": "^4.17.3",
+        "jsonwebtoken": "^8.5.1",
+        "pg": "^8.7.3",
+        "secure-password": "^4.0.0",
+        "yup": "^0.32.11",
+        "yup-locales": "^1.2.10"
+    },
+    "devDependencies": {
+        "dotenv": "^16.0.1",
+        "eslint": "^8.25.0",
+        "nodemon": "^2.0.15"
+    }
 }
