@@ -8,7 +8,6 @@ const pwd = protegerSenha();
 const cadastrarUsuario = async ( req, res ) => {
     try {
         const { nome, email, senha } = req.body;
-        // return res.status( 400 ).json( req.body );
         // eslint-disable-next-line no-undef
         const hash = ( await pwd.hash( Buffer.from( senha ) ) ).toString( "hex" );
 
@@ -21,6 +20,7 @@ const cadastrarUsuario = async ( req, res ) => {
 
         return res.status( 200 ).json( "Usuário cadastrado com sucesso." );
     } catch ( error ) {
+        console.log( error.message );
         return res.status( 400 ).json( error.message );
     }
 };
