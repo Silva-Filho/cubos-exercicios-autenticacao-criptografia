@@ -1,20 +1,70 @@
-const express = require("express");
+const express = require( "express" );
 
-const usuarios = require("./controllers/usuarios");
-const pokemons = require("./controllers/pokemons");
+// middlewares
+const usuariosMiddlewares = require( "./middlewares/usuarios" );
+const loginMiddlewares = require( "./middlewares/login" );
+const { verificarOuValidarToken } = require( "./middlewares/auth" );
+const pokemonsMiddleware = require( "./middlewares/pokemons" );
+const { validarIdParams } = require( "./middlewares/idParams" );
+
+// controllers
+const usuariosController = require( "./controllers/usuarios" );
+const loginController = require( "./controllers/login" );
+const pokemonsController = require( "./controllers/pokemons" );
 
 const rotas = express();
 
 //     usuários
-rotas.post("/cadastrar", usuarios.cadastrarUsuario);
-rotas.post("/login", usuarios.loginUsuario);
+rotas.post(
+    "/cadastrar",
+    usuariosMiddlewares.validarBodyCadastroUsuario,
+    usuariosMiddlewares.verificarEmail,
+    usuariosController.cadastrarUsuario
+);
+
+//     login
+rotas.post(
+    "/login",
+    loginMiddlewares.validarBodyLogin,
+    usuariosMiddlewares.verificarEmail,
+    usuariosMiddlewares.validarSenhaUsuario,
+    loginController.loginUsuario
+);
+
+//     autenticação
+rotas.use( verificarOuValidarToken );
 
 //     pokemons
-rotas.get("/pokemons", pokemons.listarPokemons);
-rotas.post("/pokemons", pokemons.cadastrarPokemon);
-rotas.get("/pokemons/:id", pokemons.mostrarPokemon);
-rotas.put("/pokemons/:id", pokemons.atualizarApelidoPokemon);
-rotas.delete("/pokemons/:id", pokemons.excluirPokemon);
+rotas.post(
+    "/pokemons",
+    pokemonsMiddleware.validarBodyCadastroPokemon,
+    pokemonsController.cadastrarPokemon
+);
+rotas.get(
+    "/pokemons",
+    pokemonsController.listarPokemons
+);
+//     id
+// rotas.use( validarIdParams );
+rotas.get(
+    "/pokemons/:id",
+    validarIdParams,
+    pokemonsMiddleware.verificarPokemonExiste,
+    pokemonsController.mostrarPokemon
+);
+rotas.patch(
+    "/pokemons/:id",
+    validarIdParams,
+    pokemonsMiddleware.verificarPokemonExiste,
+    pokemonsMiddleware.verificarOuValidarApelidoPokemon,
+    pokemonsController.atualizarApelidoPokemon
+);
+rotas.delete(
+    "/pokemons/:id",
+    validarIdParams,
+    pokemonsMiddleware.verificarPokemonExiste, 
+    pokemonsController.excluirPokemon
+);
 
 module.exports = {
     rotas
